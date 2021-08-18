@@ -66,7 +66,7 @@ void loop() {
 	Serial.println(output);
 
 	if (output == 0){
-		
+		original_line = 0;
 	}
 
 	
