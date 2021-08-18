@@ -57,10 +57,19 @@ void loop() {
 	tssps.update();
 	double outputSpd, outputDir;
 	outavoidance.moveDirection(original_line, &outputSpd, &outputDir);
+	double output = outavoidance.fieldPosition(original_line);
 
 	Serial.print(outputSpd);
 	Serial.print("/t");
-	Serial.println(outputDir);
+	Serial.print(outputDir);
+	Serial.print("/t");
+	Serial.println(output);
+
+	if (output == 0){
+		
+	}
+
+	
 
 	// if (lineAngle != -1) {
 	// 	if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
