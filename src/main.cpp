@@ -15,7 +15,7 @@ Orbit orbit;
 LightSensor lightsensor;
 outAvoidance outavoidance;
 
-double original_line = 0;
+double original_line = 1000;
 
 Adafruit_BNO055 bno = Adafruit_BNO055 (55, 0x29, &Wire);
 PID pid = PID(COMPASS_P, COMPASS_I, COMPASS_D);
@@ -55,20 +55,10 @@ void setup() {
 
 void loop() {
 	tssps.update();
-	double outputSpd, outputDir;
-	outavoidance.moveDirection(original_line, &outputSpd, &outputDir);
-	double output = outavoidance.fieldPosition(original_line);
 
-	Serial.print(outputSpd);
-	Serial.print("/t");
-	Serial.print(outputDir);
-	Serial.print("/t");
-	Serial.println(output);
+	outAvoidance::Movement movement = outavoidance.moveDirection();
 
-	if (output == 0){
-		original_line = 0;
-	}
-
+	// motors.move(movement.speed, movement.direction, compass_correct());
 	
 
 	// if (lineAngle != -1) {

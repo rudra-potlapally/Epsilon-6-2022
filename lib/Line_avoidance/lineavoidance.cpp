@@ -2,54 +2,54 @@
 
 LightSensor sensor;
 
-double outAvoidance::fieldPosition(double line){
+outAvoidance::Movement outAvoidance::moveDirection(){
+    double lineAngle = sensor.update();
+    outAvoidance::Movement movement;
 
-    int fieldPosition = 0;
-
-    //sets the original line and its respective outline
-    if (line == 0){
-        double dash = sensor.update();
-        if (dash != -1){
-            line = dash;
-            double outLine = floatMod((line+180), 360);
-            //checks where the robot is
-            double lineTest2 = sensor.update();
-            if (lineTest2 == outLine){
-            //outside of the field
-                fieldPosition = -1;
-            } if (lineTest2 == line){
-            //on the line
-                fieldPosition = 1;
+    switch (botlocation)
+    {
+    case 0:
+        if (lineAngle != -1){
+            if (original_line == 0){
+                original_line = lineAngle;
             }
+            botlocation = 1;
         } else{
-            //has not seen a line
-            line = 0;
-            fieldPosition = 0;
+            movement.direction = -1;
+            movement.speed = -1;
+            original_line = 0;
+            break;
         }
-    }
-    
-    
+    case 1:
+        if (lineAngle >= floatMod((original_line+90), 360) || lineAngle <= floatMod((original_line-90), 360)){
+            botlocation = -1;
+        }
 
-    return fieldPosition;
-
-}
-
-void outAvoidance::moveDirection(double lIne, double *outputSpd, double *outputDir){
-    int botposition = fieldPosition(lIne);
-
-    if (botposition == -1){
-        //outside of field
-        *outputDir = smallestAngleBetween(floatMod((lIne-180), 360), floatMod((lIne+180), 360));
-        *outputSpd = lineAvoid_fast;
+        else{
+            movement.direction = floatMod((original_line+180), 360);
+            movement.speed = lineAvoid_normal;
+            
+            botlocation = 0;
+        }
+        break;
+    case -1:
+        movement.direction = floatMod((original_line+180), 360);
+        movement.speed = lineAvoid_fast;
+        if (lineAngle <= floatMod((original_line+90), 360) || lineAngle >= floatMod((original_line-90), 360)){
+            botlocation = 1;
+        }
+        break;
+    default:
+        ////unkown state /////
+        botlocation = 0;
+        break;
     }
-    if (botposition == 1){
-        //on line
-        *outputDir = smallestAngleBetween(floatMod((lIne-180), 360), floatMod((lIne+180), 360));
-        *outputSpd = lineAvoid_normal;
-    }
-    if (botposition == 0){
-        //inside of field
-        *outputDir = 0;
-        *outputSpd = 0;
-    }
+    Serial.print(lineAngle);
+    Serial.print("\t");
+    Serial.print(original_line);
+    Serial.print("\t");
+    Serial.print(botlocation);
+    Serial.print("\t");
+    Serial.println(movement.direction);
+    return movement;
 }

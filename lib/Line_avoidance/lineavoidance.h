@@ -8,8 +8,15 @@
 
 class outAvoidance {
     public:
-        double fieldPosition(double line);
-        void moveDirection(double line, double *outputSpd, double *outputDir);
+        struct Movement{
+            int speed;
+            int direction;
+        };
+        Movement moveDirection();
+    private:
+        int botlocation = 0;
+        double original_line = 0;
+
 };
 
 #endif
