@@ -16,6 +16,8 @@
 #define COMPASS_I 0.0
 #define COMPASS_D 0.02
 
+#define CAMERA_BAUD 115200
+
 #define TSSP_X_0  0.195090322
 #define TSSP_X_1  0.555570233
 #define TSSP_X_2  0.831469612

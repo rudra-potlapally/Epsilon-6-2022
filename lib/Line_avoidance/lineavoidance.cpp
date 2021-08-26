@@ -18,10 +18,19 @@ outAvoidance::Movement outAvoidance::moveDirection(){
             movement.direction = -1;
             movement.speed = -1;
             original_line = 0;
+            botlocation = 0;
             break;
         }
     case 1:
-        if (lineAngle >= floatMod((original_line+90), 360) || lineAngle <= floatMod((original_line-90), 360)){
+        if (lineAngle == -1){
+            movement.direction = -1;
+            movement.speed = -1;
+            original_line = 0;
+            botlocation = 0;
+        }
+        else if (smallestAngleBetween(lineAngle, original_line) > 90){
+            movement.direction = floatMod((original_line+180), 360);
+            movement.speed = lineAvoid_normal;
             botlocation = -1;
         }
 
@@ -29,14 +38,26 @@ outAvoidance::Movement outAvoidance::moveDirection(){
             movement.direction = floatMod((original_line+180), 360);
             movement.speed = lineAvoid_normal;
             
-            botlocation = 0;
+            botlocation = 1;
         }
         break;
     case -1:
-        movement.direction = floatMod((original_line+180), 360);
-        movement.speed = lineAvoid_fast;
-        if (lineAngle <= floatMod((original_line+90), 360) || lineAngle >= floatMod((original_line-90), 360)){
+        if (lineAngle == -1){
+            movement.direction = floatMod((original_line+180), 360);
+            movement.speed = lineAvoid_fast;
+
+            botlocation = -1;
+        }
+        else if (smallestAngleBetween(lineAngle, original_line) < 90){
+            movement.direction = floatMod((original_line+180), 360);
+            movement.speed = lineAvoid_normal;
             botlocation = 1;
+        }
+        else {
+            movement.direction = floatMod((original_line+180), 360);
+            movement.speed = lineAvoid_fast;
+
+            botlocation = -1;
         }
         break;
     default:
@@ -44,12 +65,5 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         botlocation = 0;
         break;
     }
-    Serial.print(lineAngle);
-    Serial.print("\t");
-    Serial.print(original_line);
-    Serial.print("\t");
-    Serial.print(botlocation);
-    Serial.print("\t");
-    Serial.println(movement.direction);
     return movement;
 }

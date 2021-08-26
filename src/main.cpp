@@ -8,11 +8,13 @@
 #include "orbit.h"
 #include "LightSensor.h"
 #include "lineavoidance.h"
+#include "Camera.h"
 
 Motorcontroller motors;
 TSSPs tssps;
 Orbit orbit;
 LightSensor lightsensor;
+Camera camera;
 outAvoidance outavoidance;
 
 double original_line = 1000;
@@ -58,6 +60,7 @@ void loop() {
 
 	outAvoidance::Movement movement = outavoidance.moveDirection();
 
+	
 	// motors.move(movement.speed, movement.direction, compass_correct());
 	
 

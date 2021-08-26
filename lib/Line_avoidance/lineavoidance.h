@@ -16,6 +16,7 @@ class outAvoidance {
     private:
         int botlocation = 0;
         double original_line = 0;
+        double original_line_2 = 0;
 
 };
 

@@ -32,18 +32,33 @@ double LightSensor::update() {
     readAll();
     double x = 0;
     double y = 0;
+    double xabs = 0;
+    double yabs = 0;
+
 
     for (int j = 0; j < 16; j++) {
         if (read[j] >= ls_cal[j]) {
             x += ls_x[j];
             y += ls_y[j];
+
+            xabs += fabs(ls_x[j]);
+            yabs += fabs(ls_y[j]);
+
         }
     }
 
     double Line = RAD2DEG * atan2(y,x);
     Line = Line > 0 ? Line : Line + 360; 
     if (x == 0 && y == 0) {
-        Line = -1;
+        if (xabs != 0){
+            Line = 360;
+        }
+        else if (yabs != 0){
+            Line = 90;
+        }
+        else{
+            Line = -1;
+        }
     }
     return Line;
 }
