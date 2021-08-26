@@ -12,6 +12,7 @@ class outAvoidance {
             int speed;
             int direction;
         };
+        double getLine();
         Movement moveDirection();
     private:
         int botlocation = 0;

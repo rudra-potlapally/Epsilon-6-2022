@@ -2,6 +2,10 @@
 
 LightSensor sensor;
 
+double outAvoidance::getLine(){
+    return sensor.update();
+}
+
 outAvoidance::Movement outAvoidance::moveDirection(){
     double lineAngle = sensor.update();
     outAvoidance::Movement movement;
@@ -35,7 +39,7 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         }
 
         else{
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = floatMod((lineAngle+180), 360);
             movement.speed = lineAvoid_normal;
             
             botlocation = 1;

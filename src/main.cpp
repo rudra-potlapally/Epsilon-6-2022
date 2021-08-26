@@ -57,29 +57,25 @@ void setup() {
 
 void loop() {
 	tssps.update();
-
+	double lineAngle = outavoidance.getLine();
 	outAvoidance::Movement movement = outavoidance.moveDirection();
 
-	
-	// motors.move(movement.speed, movement.direction, compass_correct());
-	
-
-	// if (lineAngle != -1) {
-	// 	if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
-	// 		if (tssps.ballVisible) {
-	// 			Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-	// 			motors.move(orbitData.speed,orbitData.angle,compass_correct());
-	// 		}
-	// 	} else{
-	// 		motors.move(90,floatMod(lineAngle+180, 360),compass_correct());
-	// 	}
-	// } else {
-	// 	if (tssps.ballVisible) {
-	// 		Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-	// 		motors.move(orbitData.speed,orbitData.angle,compass_correct());
-	// 	}
-	// 	else {
-	// 		motors.move(0,0,compass_correct());
-	// 	}
-	// }
+	if (movement.direction != -1) {
+		if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
+			if (tssps.ballVisible) {
+				Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
+				motors.move(orbitData.speed,orbitData.angle,compass_correct());
+			}
+		} else{
+			motors.move(movement.speed,movement.direction,compass_correct());
+		}
+	} else {
+		if (tssps.ballVisible) {
+			Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
+			motors.move(orbitData.speed,orbitData.angle,compass_correct());
+		}
+		else {
+			motors.move(0,0,compass_correct());
+		}
+	}
 }
