@@ -9,6 +9,7 @@
 #include "LightSensor.h"
 #include "lineavoidance.h"
 #include "Camera.h"
+#include "movement.h"
 
 Motorcontroller motors;
 TSSPs tssps;
@@ -16,24 +17,10 @@ Orbit orbit;
 LightSensor lightsensor;
 Camera camera;
 outAvoidance outavoidance;
-
-double original_line = 1000;
+motorMove motormove;
 
 Adafruit_BNO055 bno = Adafruit_BNO055 (55, 0x29, &Wire);
 PID pid = PID(COMPASS_P, COMPASS_I, COMPASS_D);
-
-int compass_correct() {
-	sensors_event_t event;
-	bno.getEvent(&event);
-
-	float orient = (float)event.orientation.x;
-
-	if (orient > 180){
-		orient = orient -360;
-	}
-	
-	return pid.update(orient, 0);
-}
 
 void ERROR(){
 	pinMode(13, OUTPUT);
@@ -47,6 +34,7 @@ void ERROR(){
 
 void setup() {
 	Serial.begin(9600);
+	camera.init();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	if(!bno.begin()){
@@ -57,25 +45,10 @@ void setup() {
 
 void loop() {
 	tssps.update();
-	double lineAngle = outavoidance.getLine();
-	outAvoidance::Movement movement = outavoidance.moveDirection();
+	camera.update();
 
-	if (movement.direction != -1) {
-		if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
-			if (tssps.ballVisible) {
-				Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-				motors.move(orbitData.speed,orbitData.angle,compass_correct());
-			}
-		} else{
-			motors.move(movement.speed,movement.direction,compass_correct());
-		}
-	} else {
-		if (tssps.ballVisible) {
-			Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-			motors.move(orbitData.speed,orbitData.angle,compass_correct());
-		}
-		else {
-			motors.move(0,0,compass_correct());
-		}
-	}
+	outAvoidance::Movement lineavoidance = outavoidance.moveDirection();
+	motors.move(lineavoidance.speed, lineavoidance.direction, motormove.compass_correct());
+
+	// motormove.generalMovement();
 }

@@ -1,6 +1,9 @@
 #ifndef PINS_H
 #define PINS_H
 
+#define CAMRX 1
+#define CAMTX 0
+
 #define BLINA 26
 #define BLINB 27
 #define BLPWM 23

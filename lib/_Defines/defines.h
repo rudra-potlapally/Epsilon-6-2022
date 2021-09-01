@@ -7,6 +7,7 @@
 #define RAD2DEG (180/3.141592)
 
 #define ORBIT_FAR 112
+#define ORBIT_CLOSE 140
 #define ORBIT_FAR_SPEED 40
 #define ORBIT_CLOSE_SPEED 30
 #define ORBIT_STRIKE_ANGLE 20 
@@ -17,6 +18,7 @@
 #define COMPASS_D 0.02
 
 #define CAMERA_BAUD 115200
+#define ATTACK_DISTANCE 550
 
 #define TSSP_X_0  0.195090322
 #define TSSP_X_1  0.555570233
@@ -72,7 +74,10 @@ float smallestAngleBetween(float angleCounterClockwise, float angleClockwise);
 
 int8_t findSign(float value);
 
+bool angleIsInside(float angleBoundCounterClockwise, float angleBoundClockwise, float angleCheck);
+
 struct Movement {
+	
 	float direction;
 	float correction;
 	float speed;
