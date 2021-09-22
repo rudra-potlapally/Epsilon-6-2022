@@ -9,7 +9,6 @@
 #include "LightSensor.h"
 #include "lineavoidance.h"
 #include "Camera.h"
-#include "movement.h"
 
 Motorcontroller motors;
 TSSPs tssps;
@@ -17,11 +16,20 @@ Orbit orbit;
 LightSensor lightsensor;
 Camera camera;
 outAvoidance outavoidance;
-motorMove motormove;
 
+double original_line = 1000;
 Adafruit_BNO055 bno = Adafruit_BNO055 (55, 0x29, &Wire);
 PID pid = PID(COMPASS_P, COMPASS_I, COMPASS_D);
-
+int compass_correct() {
+	sensors_event_t event;
+	bno.getEvent(&event);
+	float orient = (float)event.orientation.x;
+	if (orient > 180){
+		orient = orient -360;
+	}
+	
+	return pid.update(orient, 0);
+}
 void ERROR(){
 	pinMode(13, OUTPUT);
 	while(1){
@@ -31,10 +39,8 @@ void ERROR(){
 		delay(600);
 	}
 }
-
 void setup() {
 	Serial.begin(9600);
-	camera.init();
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	if(!bno.begin()){
@@ -42,13 +48,29 @@ void setup() {
 	}
 	digitalWrite(13, LOW);
 }
-
 void loop() {
 	tssps.update();
-	camera.update();
 
-	outAvoidance::Movement lineavoidance = outavoidance.moveDirection();
-	motors.move(lineavoidance.speed, lineavoidance.direction, motormove.compass_correct());
+	outAvoidance::Movement movement = outavoidance.moveDirection();
+	motors.move(movement.speed, movement.direction, compass_correct());
 
-	// motormove.generalMovement();
+
+	// if (lineAngle != -1) {
+	// 	if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
+	// 		if (tssps.ballVisible) {
+	// 			Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
+	// 			motors.move(orbitData.speed,orbitData.angle,compass_correct());
+	// 		}
+	// 	} else{
+	// 		motors.move(90,floatMod(lineAngle+180, 360),compass_correct());
+	// 	}
+	// } else {
+	// 	if (tssps.ballVisible) {
+	// 		Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
+	// 		motors.move(orbitData.speed,orbitData.angle,compass_correct());
+	// 	}
+	// 	else {
+	// 		motors.move(0,0,compass_correct());
+	// 	}
+	// }
 }

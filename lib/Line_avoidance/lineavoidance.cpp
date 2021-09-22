@@ -1,14 +1,10 @@
 #include "lineavoidance.h"
-
 LightSensor sensor;
-
 
 outAvoidance::Movement outAvoidance::moveDirection(){
     double lineAngle = sensor.update();
     outAvoidance::Movement movement;
-
-    switch (botlocation)
-    {
+    switch (botlocation){
     case 0:
         if (lineAngle != -1){
             if (original_line == 0){
@@ -34,15 +30,11 @@ outAvoidance::Movement outAvoidance::moveDirection(){
             movement.speed = lineAvoid_normal;
             botlocation = -1;
         }
-        else if(smallestAngleBetween(lineAngle, original_line) < 90 && lineAngle != -1){
-            movement.direction = floatMod(((original_line+lineAngle)/2), 360);
-            movement.speed = lineAvoid_normal;
-            botlocation = 1;
-        }
+
         else{
-            movement.direction = floatMod((lineAngle+180), 360);
+            movement.direction = floatMod((original_line+180), 360);
             movement.speed = lineAvoid_normal;
-            
+
             botlocation = 1;
         }
         break;
@@ -70,5 +62,3 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         botlocation = 0;
         break;
     }
-    return movement;
-}

@@ -1,5 +1,4 @@
 #include "LightSensor.h"
-
 LightSensor::LightSensor() {
     pinMode(MPLS1, OUTPUT);
     pinMode(MPLS2, OUTPUT);
@@ -14,20 +13,16 @@ void LightSensor::readAll() {
         int val2 = (i>>1) & 0x01;
         int val3 = (i>>2) & 0x01;
         int val4 = (i>>3) & 0x01;
-
         digitalWrite(MPLS1, val1);
         digitalWrite(MPLS2, val2);
         digitalWrite(MPLS3, val3);
         digitalWrite(MPLS4, val4);
-
         read[i] = analogRead(MPOUT);
-
         // Serial.print(read[i]);
         // Serial.print(" ");
     }
     // Serial.println();
 }
-
 double LightSensor::update() {
     readAll();
     double x = 0;
