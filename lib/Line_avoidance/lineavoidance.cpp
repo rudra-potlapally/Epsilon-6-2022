@@ -27,13 +27,13 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         }
         else if (smallestAngleBetween(lineAngle, original_line) > 90){
             movement.direction = floatMod((original_line+180), 360);
-            movement.speed = lineAvoid_normal;
+            movement.speed = LS_AVOID_MEDIUM;
             botlocation = -1;
         }
 
         else{
             movement.direction = floatMod((original_line+180), 360);
-            movement.speed = lineAvoid_normal;
+            movement.speed = LS_AVOID_MEDIUM;
 
             botlocation = 1;
         }
@@ -41,18 +41,18 @@ outAvoidance::Movement outAvoidance::moveDirection(){
     case -1:
         if (lineAngle == -1){
             movement.direction = floatMod((original_line+180), 360);
-            movement.speed = lineAvoid_fast;
+            movement.speed = LS_AVOID_FAST;
 
             botlocation = -1;
         }
         else if (smallestAngleBetween(lineAngle, original_line) < 90){
             movement.direction = floatMod((original_line+180), 360);
-            movement.speed = lineAvoid_normal;
+            movement.speed = LS_AVOID_MEDIUM;
             botlocation = 1;
         }
         else {
             movement.direction = floatMod((original_line+180), 360);
-            movement.speed = lineAvoid_fast;
+            movement.speed = LS_AVOID_FAST;
 
             botlocation = -1;
         }
@@ -62,3 +62,5 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         botlocation = 0;
         break;
     }
+    return movement;
+}

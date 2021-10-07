@@ -10,9 +10,9 @@ RADIANS_TO_DEGREES = 57.295779513082320876798154814105
 
 # Individual
 if ROBOT_A:
-    thresholds = [((30, 63, -21, -7, 10, 81),), ((45, 73, -18, 5, -62, -39),)] # Yellow  is first
+    thresholds = [((50, 79, -6, 18, 24, 82),), ((57, 72, -15, 3, -65, -48),)] # Yellow  is first
 else:
-    thresholds = [((30, 63, -21, -7, 10, 81),), ((45, 73, -18, 5, -62, -39),)] # Yellow  is first
+    thresholds = [((50, 79, -6, 18, 24, 82),), ((57, 72, -15, 3, -65, -48),)] # Yellow  is first
 
 # Superteam
 #if ROBOT_A:
@@ -27,15 +27,13 @@ sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA)
 sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False)
-sensor.set_auto_whitebal(False, (-5.623446, -6.02073, -1.317097))
+sensor.set_auto_whitebal(False, (-4.64378, -6.02073, -1.63865))
 sensor.set_brightness(1)
 sensor.set_contrast(0)
 sensor.set_saturation(2)
 clock = time.clock()
-uart = UART(3, 115200, timeout_char = 10)
+uart = UART(3, 9600, timeout_char = 10)
 redLED.off()
-
-
 if ATTACK_BLUE:
     while(True):
         data = [-1, -1, -1, -1]
@@ -61,7 +59,7 @@ if ATTACK_BLUE:
                 data[2] += 360
             data[3] = round(sqrt((largest_blob.cx() - 80)**2 + (largest_blob.cy() - 60)**2))
             img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
-        print(clock.fps()) # Not needed for Gameplay
+        #print(clock.fps()) # Not needed for Gameplay
         uart.writechar(255)
         uart.writechar(255)
         uart.writechar(data[0] >> 8)
@@ -97,7 +95,7 @@ else:
                 data[2] += 360
             data[3] = round(sqrt((largest_blob.cx() - 80)**2 + (largest_blob.cy() - 60)**2))
             img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
-        print(clock.fps()) # Not needed for Gameplay
+        #print(clock.fps()) # Not needed for Gameplay
         uart.writechar(255)
         uart.writechar(255)
         uart.writechar(data[0] >> 8)
@@ -106,5 +104,5 @@ else:
         uart.writechar(data[2] >> 8)
         uart.writechar(data[2])
         uart.writechar(data[3])
-        img.draw_line(82, 60, 78, 60) # Not needed for Gameplay
-        img.draw_line(80, 62, 80, 58) # Not needed for Gameplay
+        img.draw_line(82, 60, 78, 60)
+        img.draw_line(80, 62, 80, 58)

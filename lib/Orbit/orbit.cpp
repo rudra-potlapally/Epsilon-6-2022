@@ -2,13 +2,15 @@
 
 Orbit::OrbitData Orbit::update(double ballAngle, double ballStrength){
     
-    Orbit::OrbitData output;
+    OrbitData output;
 
-    if (ballStrength <= ORBIT_FAR) {
+    if(ballStrength == 0) {
+        output.speed = 0;
+        output.angle = -1;
+    } else if(ballStrength <= ORBIT_FAR) {
         output.speed = ORBIT_FAR_SPEED;
         output.angle = ballAngle;
-    }
-    else {
+    } else {
         if (360-ORBIT_STRIKE_ANGLE > ballAngle && ballAngle > ORBIT_STRIKE_ANGLE ) {
             output.speed = ORBIT_CLOSE_SPEED;
             if (ballAngle < 180) {

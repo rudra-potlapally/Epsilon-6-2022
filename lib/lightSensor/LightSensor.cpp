@@ -23,37 +23,58 @@ void LightSensor::readAll() {
     }
     // Serial.println();
 }
+
 double LightSensor::update() {
     readAll();
-    double x = 0;
-    double y = 0;
-    double xabs = 0;
-    double yabs = 0;
+    int clusterNum = -1;
+    LightSensor::Cluster clusterArray[4];
 
-
-    for (int j = 0; j < 16; j++) {
-        if (read[j] >= ls_cal[j]) {
-            x += ls_x[j];
-            y += ls_y[j];
-
-            xabs += fabs(ls_x[j]);
-            yabs += fabs(ls_y[j]);
-
+    for (int j = 0; j < 16; j++) { //reads sensors
+        if (read[j] >= ls_cal[j]) { //checks for white
+            if (!inCluster){ //checks if it is in cluster
+                inCluster = true;
+                clusterNum++;
+                clusterArray[clusterNum].start = j;
+            }
+            if (j == 15 && clusterArray[0].start != -1){
+                clusterArray[0].start = clusterArray[clusterNum].start;
+            }
+        }
+        else { //if no longer in white
+            if (inCluster){ //checks if in cluster
+                inCluster = false;
+                clusterArray[clusterNum].end = j-1;
+                clusterArray[clusterNum].midpoint = midAngleBetween(clusterArray[clusterNum].start * (360/LS_NUM), clusterArray[clusterNum].end * (360/LS_NUM));
+            }
         }
     }
-
-    double Line = RAD2DEG * atan2(y,x);
-    Line = Line > 0 ? Line : Line + 360; 
-    if (x == 0 && y == 0) {
-        if (xabs != 0){
-            Line = 360;
-        }
-        else if (yabs != 0){
-            Line = 90;
-        }
-        else{
-            Line = -1;
-        }
+    switch(clusterNum){
+        case -1:
+            lineAngle = -1;
+            break;
+        case 0:
+            lineAngle = 360 - floatMod(clusterArray[0].midpoint-270, 360);
+            break;
+        case 1:
+            if (angleBetween(clusterArray[0].midpoint, clusterArray[1].midpoint) <= 180){
+                lineAngle = 360 - floatMod(midAngleBetween(clusterArray[0].midpoint, clusterArray[1].midpoint) - 270, 360);
+            } else{
+                lineAngle = 360 - floatMod(midAngleBetween(clusterArray[1].midpoint, clusterArray[0].midpoint) -270, 360);
+            }
+            break;
+        case 2:
+            float angleDiff12 = angleBetween(clusterArray[0].midpoint, clusterArray[1].midpoint);
+            float angleDiff23 = angleBetween(clusterArray[1].midpoint, clusterArray[2].midpoint);
+            float angleDiff31 = angleBetween(clusterArray[2].midpoint, clusterArray[0].midpoint);
+            float biggestAngle = fmax(angleDiff12, fmax(angleDiff23, angleDiff31));
+            if (biggestAngle == angleDiff12){
+                lineAngle = 360 - floatMod(midAngleBetween(clusterArray[1].midpoint, clusterArray[0].midpoint) - 270, 360);
+            } else if (biggestAngle == angleDiff23){
+                lineAngle = 360 - floatMod(midAngleBetween(clusterArray[2].midpoint, clusterArray[1].midpoint) - 270, 360);
+            } else{
+                lineAngle = 360 - floatMod(midAngleBetween(clusterArray[0].midpoint, clusterArray[2].midpoint) - 270, 360);
+            }
+            break;
     }
-    return Line;
+    return lineAngle;
 }

@@ -1,21 +1,22 @@
 #ifndef DEFINES_H
 #define DEFINES_H
+
 #include <Arduino.h>
+#include <math.h>
+#include <EEPROM.h>
 
 #define DEG2RAD (3.141592/180)
 #define RAD2DEG (180/3.141592)
 
-#define ORBIT_FAR 112
-#define ORBIT_FAR_SPEED 60
-#define ORBIT_CLOSE_SPEED 40
-#define ORBIT_STRIKE_ANGLE 20 
-#define STRIKE_SPEED 75
+#define ORBIT_FAR 145
+#define ORBIT_FAR_SPEED 20
+#define ORBIT_CLOSE_SPEED 30
+#define ORBIT_STRIKE_ANGLE 10 
+#define STRIKE_SPEED 40
 
-#define COMPASS_P 0.35
+#define COMPASS_P 1.03
 #define COMPASS_I 0.0
-#define COMPASS_D 0.02
-
-#define CAMERA_BAUD 115200
+#define COMPASS_D 0.09
 
 #define TSSP_X_0  0.195090322
 #define TSSP_X_1  0.555570233
@@ -50,10 +51,10 @@
 #define TSSP_Y_13 -0.55557
 #define TSSP_Y_14 -0.83147
 #define TSSP_Y_15 -0.98079
+
 #define TSSP_NUM 16
 #define TSSP_READ_NUM 256
-#define BALL_CLOSE_STRENGTH 140
-
+#define BALL_CLOSE_STRENGTH 100
 
 #define ARRAYSHIFTDOWN(a, lower, upper){          \
 	if (upper == (sizeof(a)/sizeof(a[0])) - 1){   \
@@ -71,17 +72,22 @@ float smallestAngleBetween(float angleCounterClockwise, float angleClockwise);
 
 int8_t findSign(float value);
 
-struct Movement {
-	float direction;
-	float correction;
-	float speed;
-};
+float midAngleBetween(float angleCounterClockwise, float angleClockwise);
+
+float smallestAngleBetween(float angleCounterClockwise, float angleClockwise);
+
+int8_t findSign(float value);
+
+bool angleIsInside(float angleBoundCounterClockwise, float angleBoundClockwise, float angleCheck);
+
+
 
 #define WHITE_LINE 300
 #define LS_NUM 16
-#define LINE_BUFFER 200
-#define lineAvoid_fast 200;
-#define lineAvoid_normal 100;
+#define LINE_BUFFER 300
+#define LS_AVOID_MEDIUM 150
+#define LS_AVOID_FAST 250
+
 #define LS_X_0 -1
 #define LS_X_1 -0.923
 #define LS_X_2 -0.707
@@ -115,5 +121,7 @@ struct Movement {
 #define LS_Y_13 -0.923 
 #define LS_Y_14 -0.707
 #define LS_Y_15 -0.382
+
+#define CAMERA_BAUD 9600
 
 #endif
