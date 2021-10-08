@@ -10,9 +10,9 @@ RADIANS_TO_DEGREES = 57.295779513082320876798154814105
 
 # Individual
 if ROBOT_A:
-    thresholds = [((50, 79, -6, 18, 24, 82),), ((57, 72, -15, 3, -65, -48),)] # Yellow  is first
+    thresholds = [((67, 78, 2, 20, 51, 127),), ((56, 81, -32, 5, -52, -28),)] # Yellow  is first
 else:
-    thresholds = [((50, 79, -6, 18, 24, 82),), ((57, 72, -15, 3, -65, -48),)] # Yellow  is first
+    thresholds = [((77, 94, -17, 13, 45, 80),), ((56, 81, -32, 5, -52, -28),)] # Yellow  is first
 
 # Superteam
 #if ROBOT_A:
@@ -27,7 +27,7 @@ sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA)
 sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False)
-sensor.set_auto_whitebal(False, (-4.64378, -6.02073, -1.63865))
+sensor.set_auto_whitebal(False, (-3.97489, -6.02073, -3.35391))
 sensor.set_brightness(1)
 sensor.set_contrast(0)
 sensor.set_saturation(2)
