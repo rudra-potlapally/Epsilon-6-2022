@@ -11,8 +11,8 @@
 #define ROBOT 2
 
 #define ORBIT_FAR (ROBOT == 1 ? 115 : 115)
-#define ORBIT_FAR_SPEED (ROBOT == 1 ? 60 : 45)
-#define ORBIT_CLOSE_SPEED (ROBOT == 1 ? 50 : 37.5)
+#define ORBIT_FAR_SPEED (ROBOT == 1 ? 50 : 45)
+#define ORBIT_CLOSE_SPEED (ROBOT == 1 ? 40 : 37.5)
 #define ORBIT_STRIKE_ANGLE (ROBOT == 1 ? 10 : 10)
 #define STRIKE_SPEED (ROBOT == 1 ? 70 : 52.5)
 
@@ -87,9 +87,10 @@ bool angleIsInside(float angleBoundCounterClockwise, float angleBoundClockwise, 
 
 #define WHITE_LINE 300
 #define LS_NUM 16
-#define LINE_BUFFER 300
+#define LINE_BUFFER 200
 #define LS_AVOID_MEDIUM 200
 #define LS_AVOID_FAST 250
+#define LS_CALIBRATE_COUNT 10
 
 #define LS_X_0 -1
 #define LS_X_1 -0.923

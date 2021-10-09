@@ -7,6 +7,8 @@ LightSensor::LightSensor() {
     pinMode(MPOUT, INPUT);
 }
 
+
+
 void LightSensor::readAll() {
     for (int i = 0; i < 16; i++) {
         int val1 = (i>>0) & 0x01;
@@ -23,7 +25,15 @@ void LightSensor::readAll() {
     }
     // Serial.println();
 }
-
+void LightSensor::init(){
+    for(uint8_t i = 0; i < LS_NUM; i++) {
+        uint16_t calibrateTotal = 0;
+        for (uint8_t j = 0; j < LS_CALIBRATE_COUNT; j++) {
+            calibrateTotal += ls_cal[i];
+        }
+        ls_cal[i] = (uint16_t)round(calibrateTotal / LS_CALIBRATE_COUNT) + LINE_BUFFER;
+    }
+}
 double LightSensor::update() {
     readAll();
     int clusterNum = -1;
@@ -76,5 +86,9 @@ double LightSensor::update() {
             }
             break;
     }
-    return lineAngle;
+    if (lineAngle != -1){
+        return lineAngle+10;
+    } else{
+        return lineAngle;
+    }
 }

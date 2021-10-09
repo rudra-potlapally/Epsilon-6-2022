@@ -48,6 +48,7 @@ void setup() {
 	pinMode(13, OUTPUT);
 	digitalWrite(13, HIGH);
 	camera.init();
+	// lightsensor.init();
 	if(!bno.begin()){
 		ERROR();
 	}
