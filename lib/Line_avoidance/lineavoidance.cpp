@@ -26,13 +26,13 @@ outAvoidance::Movement outAvoidance::moveDirection(){
             botlocation = 0;
         }
         else if (smallestAngleBetween(lineAngle, original_line) > 90){
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = (ROBOT == 1 ? floatMod((original_line+180), 360) : floatMod((original_line+180), 360));
             movement.speed = LS_AVOID_MEDIUM;
             botlocation = -1;
         }
 
         else{
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = (ROBOT == 1 ? floatMod((original_line+180), 360) : floatMod((original_line+180), 360));
             movement.speed = LS_AVOID_MEDIUM;
 
             botlocation = 1;
@@ -40,18 +40,17 @@ outAvoidance::Movement outAvoidance::moveDirection(){
         break;
     case -1:
         if (lineAngle == -1){
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = (ROBOT == 1 ? floatMod((original_line+180), 360) : floatMod((original_line+180), 360));
             movement.speed = LS_AVOID_FAST;
-
             botlocation = -1;
         }
         else if (smallestAngleBetween(lineAngle, original_line) < 90){
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = (ROBOT == 1 ? floatMod((original_line+180), 360) : floatMod((original_line+180), 360));
             movement.speed = LS_AVOID_MEDIUM;
             botlocation = 1;
         }
         else {
-            movement.direction = floatMod((original_line+180), 360);
+            movement.direction = (ROBOT == 1 ? floatMod((original_line+180), 360) : floatMod((original_line+180), 360));
             movement.speed = LS_AVOID_FAST;
 
             botlocation = -1;

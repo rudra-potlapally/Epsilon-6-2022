@@ -3,16 +3,16 @@ import pyb
 from math import atan2, sqrt
 from pyb import UART
 
-ROBOT_A = False
-ATTACK_BLUE = False
+ROBOT_A = True
+ATTACK_BLUE = True
 DEGREES_TO_RADIANS = 0.017453292519943295769236907684886
 RADIANS_TO_DEGREES = 57.295779513082320876798154814105
 
 # Individual
 if ROBOT_A:
-    thresholds = [((67, 78, 2, 20, 51, 127),), ((56, 81, -32, 5, -52, -28),)] # Yellow  is first
+    thresholds = [((75, 92, -8, 20, 23, 63),), ((56, 81, -32, 5, -52, -28),)] # Yellow  is first
 else:
-    thresholds = [((77, 94, -17, 13, 45, 80),), ((56, 81, -32, 5, -52, -28),)] # Yellow  is first
+    thresholds = [((78, 93, -9, 21, 22, 56),), ((50, 64, 11, 39, -77, -45),)] # Yellow  is first
 
 # Superteam
 #if ROBOT_A:
@@ -27,7 +27,7 @@ sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA)
 sensor.skip_frames(time = 2000)
 sensor.set_auto_gain(False)
-sensor.set_auto_whitebal(False, (-3.97489, -6.02073, -3.35391))
+sensor.set_auto_whitebal(False, (-5.49487, -6.02073, -0.417683))
 sensor.set_brightness(1)
 sensor.set_contrast(0)
 sensor.set_saturation(2)
@@ -48,7 +48,7 @@ if ATTACK_BLUE:
             if data[0] < 0:
                 data[0] += 360
             data[1] = round(sqrt((largest_blob.cx() - 80)**2 + (largest_blob.cy() - 60)**2))
-            img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
+            #img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
         blobs = img.find_blobs(thresholds[0], x_stride=5, y_stride=5, area_threshold=200, pixel_threshold=200, merge=True, margin=23)
         if len(blobs) != 0:
             largest_blob = sorted(blobs,key=lambda blob: -blob.area())[0]
@@ -58,7 +58,7 @@ if ATTACK_BLUE:
             if data[2] < 0:
                 data[2] += 360
             data[3] = round(sqrt((largest_blob.cx() - 80)**2 + (largest_blob.cy() - 60)**2))
-            img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
+            #img.draw_line(80, 60, largest_blob.cx(), largest_blob.cy()) # Not needed for Gameplay
         #print(clock.fps()) # Not needed for Gameplay
         uart.writechar(255)
         uart.writechar(255)
@@ -68,8 +68,8 @@ if ATTACK_BLUE:
         uart.writechar(data[2] >> 8)
         uart.writechar(data[2])
         uart.writechar(data[3])
-        img.draw_line(82, 60, 78, 60)
-        img.draw_line(80, 62, 80, 58)
+        #img.draw_line(82, 60, 78, 60)
+        #img.draw_line(80, 62, 80, 58)
 else:
     while(True):
         data = [-1, -1, -1, -1]
@@ -104,5 +104,6 @@ else:
         uart.writechar(data[2] >> 8)
         uart.writechar(data[2])
         uart.writechar(data[3])
+        #print(data[0], ' ', data[1])
         img.draw_line(82, 60, 78, 60)
         img.draw_line(80, 62, 80, 58)

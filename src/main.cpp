@@ -31,8 +31,11 @@ int compass_correct(float targetHeading = 0) {
 	if (targetHeading > 180) {
 		targetHeading = targetHeading - 360;
 	}
+	if (targetHeading >= 25 && targetHeading <= 335){
+		targetHeading = 0;
+	}
 	
-	return pid.update(orient, targetHeading);
+	return pid.update(orient, 1.25*targetHeading);
 }
 void ERROR(){
 	pinMode(13, OUTPUT);
@@ -56,30 +59,38 @@ void setup() {
 }
 void loop() {
 	tssps.update();
+	camera.update();
 	float lineAngle = lightsensor.update();
 	outAvoidance::Movement movement = outavoidance.moveDirection();
+
+	// motors.move(20, 1, compass_correct());
+	if (ROBOT != 1){
+		camera.attackingGoalAngle = 0;
+	}
 
 	if (movement.direction != -1) {
 		motors.move(movement.speed, movement.direction, compass_correct());
 		if (tssps.ballDir > floatMod(lineAngle+LINE_BUFFER, 360) && tssps.ballDir < floatMod(lineAngle-LINE_BUFFER, 360) && tssps.ballVisible){
 			if (tssps.ballVisible) {
 				Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-				motors.move(orbitData.speed, floatMod(tssps.ballDir +tssps.calculateAngleAddition(), 360), compass_correct(0));
-				Serial.println(floatMod(tssps.ballDir + tssps.calculateAngleAddition(), 360));
+				motors.move(orbitData.speed, floatMod(tssps.ballDir +tssps.calculateAngleAddition(), 360), compass_correct(camera.attackingGoalAngle));
+				// Serial.println(floatMod(tssps.ballDir + tssps.calculateAngleAddition(), 360));
+			} else{
+				motors.move(movement.speed, movement.direction, compass_correct(0));
 			}
 		} else{
 			motors.move(movement.speed,movement.direction,compass_correct(0));
-			Serial.println(movement.direction);
+			// Serial.println(movement.direction);
 		}
 	} else {
 		if (tssps.ballVisible) {
 			Orbit::OrbitData orbitData = orbit.update(tssps.ballDir, tssps.ballStr);
-			Serial.println(floatMod(tssps.ballDir + tssps.calculateAngleAddition(), 360));
-			motors.move(orbitData.speed, orbitData.angle, compass_correct(0));
+			// Serial.println(floatMod(tssps.ballDir + tssps.calculateAngleAddition(), 360));
+			motors.move(orbitData.speed, floatMod(tssps.ballDir +tssps.calculateAngleAddition(), 360), compass_correct(camera.attackingGoalAngle));
 		}
 		else {
-			motors.move(0,0,compass_correct(0));
-			Serial.println("nothing");
+			motors.move(0,0,compass_correct(camera.attackingGoalAngle));
+			// Serial.println("nothing");
 		}
 	}
 }

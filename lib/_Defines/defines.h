@@ -8,17 +8,17 @@
 #define DEG2RAD (3.141592/180)
 #define RAD2DEG (180/3.141592)
 
-#define ROBOT 2
+#define ROBOT 1
 
-#define ORBIT_FAR (ROBOT == 1 ? 115 : 115)
-#define ORBIT_FAR_SPEED (ROBOT == 1 ? 50 : 45)
-#define ORBIT_CLOSE_SPEED (ROBOT == 1 ? 40 : 37.5)
+#define ORBIT_FAR (ROBOT == 1 ? 130 : 120)
+#define ORBIT_FAR_SPEED (ROBOT == 1 ? 40 : 40)
+#define ORBIT_CLOSE_SPEED (ROBOT == 1 ? 37.5 : 37.5)
 #define ORBIT_STRIKE_ANGLE (ROBOT == 1 ? 10 : 10)
-#define STRIKE_SPEED (ROBOT == 1 ? 70 : 52.5)
+#define STRIKE_SPEED (ROBOT == 1 ? 52.5 : 52.5)
 
-#define COMPASS_P (ROBOT == 1 ? 1.03 : 0.35)
+#define COMPASS_P (ROBOT == 1 ? 1.03 : 0.4)
 #define COMPASS_I (ROBOT == 1 ? 0 : 0)
-#define COMPASS_D (ROBOT == 1 ? 0.09 : 0.03)
+#define COMPASS_D (ROBOT == 1 ? 0.09 : 0.025)
 
 #define TSSP_X_0  0.195090322
 #define TSSP_X_1  0.555570233
@@ -56,8 +56,8 @@
 
 #define TSSP_NUM 16
 #define TSSP_READ_NUM 256
-#define BALL_CLOSE_STRENGTH (ROBOT == 1 ? 100 : 120)
-// #define BALL_CLOSE_STRENGTH_LEFT (ROBOT == 1 ? 165 : 185)
+#define BALL_CLOSE_STRENGTH (ROBOT == 1 ? 140 : 130)
+#define BALL_CLOSE_STRENGTH_LEFT (ROBOT == 1 ? 165 : 185)
 
 #define ARRAYSHIFTDOWN(a, lower, upper){          \
 	if (upper == (sizeof(a)/sizeof(a[0])) - 1){   \
@@ -88,8 +88,8 @@ bool angleIsInside(float angleBoundCounterClockwise, float angleBoundClockwise, 
 #define WHITE_LINE 300
 #define LS_NUM 16
 #define LINE_BUFFER 200
-#define LS_AVOID_MEDIUM 200
-#define LS_AVOID_FAST 250
+#define LS_AVOID_MEDIUM (ROBOT == 1 ? 80 : 80)
+#define LS_AVOID_FAST (ROBOT == 1 ? 100 : 100)
 #define LS_CALIBRATE_COUNT 10
 
 #define LS_X_0 -1

@@ -86,9 +86,13 @@ double LightSensor::update() {
             }
             break;
     }
-    if (lineAngle != -1){
+    if (lineAngle != -1 && ROBOT == 1){
         return lineAngle+10;
-    } else{
+    } 
+    else if(lineAngle != -1 && ROBOT != 1){
+        return lineAngle;
+    }
+    else{
         return lineAngle;
     }
 }
